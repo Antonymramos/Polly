@@ -1,0 +1,164 @@
+{% load static %}
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Busca de Casos</title>
+    <link rel="stylesheet" href="{% static 'atendimentos/styles.css' %}"> <!-- Se você tiver um arquivo CSS externo -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .form-group label {
+            width: 250px;
+            text-align: left;
+        }
+
+        .form-group .field {
+            flex: 1;
+            text-align: right;
+        }
+
+        .submit-btn {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .submit-btn:hover {
+            background-color: #45a049;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th, table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        table td a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+
+        table td a:hover {
+            text-decoration: underline;
+        }
+
+        .no-results {
+            text-align: center;
+            font-size: 18px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Buscar Protocolos</h1>
+
+    <!-- Formulário de Busca -->
+    <form method="GET" action="{% url 'Sistema_Poly:busca_protocolos' %}">
+        <div class="form-group">
+            <label for="protocolo">Número do Protocolo:</label>
+            <input type="text" name="protocolo" id="protocolo" value="{{ request.GET.protocolo }}">
+        </div>
+
+        <div class="form-group">
+            <label for="nome">Nome da Vítima:</label>
+            <input type="text" name="nome" id="nome" value="{{ request.GET.nome }}">
+        </div>
+
+        <div class="form-group">
+            <label for="status_fase">Status da Fase:</label>
+            <input type="text" name="status_fase" id="status_fase" value="{{ request.GET.status_fase }}">
+        </div>
+
+        <div class="form-group">
+            <label for="fase">Fase:</label>
+            <select name="fase" id="fase">
+                <option value="">Selecione</option>
+                <option value="Fase 1" {% if request.GET.fase == 'Fase 1' %}selected{% endif %}>Fase 1</option>
+                <option value="Fase 2" {% if request.GET.fase == 'Fase 2' %}selected{% endif %}>Fase 2</option>
+                <option value="Fase 3" {% if request.GET.fase == 'Fase 3' %}selected{% endif %}>Fase 3</option>
+                <option value="Fase 4" {% if request.GET.fase == 'Fase 4' %}selected{% endif %}>Fase 4</option>
+            </select>
+        </div>
+
+        <button type="submit" class="submit-btn">Buscar</button>
+    </form>
+
+    <!-- Exibição dos Resultados da Busca -->
+    {% if protocolos %}
+        <h2>Protocolos Encontrados</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Protocolo</th>
+                    <th>Nome da Vítima</th>
+                    <th>Status da Fase</th>
+                    <th>Fase</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for protocolo in protocolos %}
+                    <tr>
+                        <td>{{ protocolo.protocolo }}</td>
+                        <td>{{ protocolo.nome_completo }}</td>
+                        <td>
+                            {% if protocolo.status_fase %}
+                                {{ protocolo.status_fase }}
+                            {% elif protocolo.status_fase %}
+                                {{ protocolo.status_fase }}
+                            {% elif protocolo.status_fase %}
+                                {{ protocolo.status_fase }}
+                            {% elif protocolo.status_fase %}
+                                {{ protocolo.status_fase }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if protocolo.fase == 'Fase 1' %}
+                                Fase 1
+                            {% elif protocolo.fase == 'Fase 2' %}
+                                Fase 2
+                            {% elif protocolo.fase == 'Fase 3' %}
+                                Fase 3
+                            {% elif protocolo.fase == 'Fase 4' %}
+                                Fase 4
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'Sistema_Poly:detalhes_protocolo' %}">Ver Detalhes</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="no-results">Nenhum protocolo encontrado para os critérios de busca informados.</p>
+    {% endif %}
+
+</body>
+</html>

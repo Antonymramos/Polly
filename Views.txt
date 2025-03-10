@@ -1,0 +1,59 @@
+def busca_protocolos(request):
+    # Captura os parâmetros de busca do formulário
+    protocolo = request.GET.get('protocolo', '')
+    nome = request.GET.get('nome', '')
+    status_fase = request.GET.get('status_fase', '')
+    fase = request.GET.get('fase', '')
+
+    # Inicializa a queryset vazia para resultados
+    protocolos = []
+
+    # Se fase foi especificada, vamos buscar nos modelos de fase apropriados
+    if fase == 'Fase 1':
+        # Buscar na Fase1
+        protocolos = Fase1.objects.all()
+        if protocolo:
+            protocolos = protocolos.filter(protocolo__icontains=protocolo)
+        if nome:
+            protocolos = protocolos.filter(nome_completo__icontains=nome)
+        if status_fase:
+            protocolos = protocolos.filter(status_fase1__icontains=status_fase)
+
+    elif fase == 'Fase 2':
+        # Buscar na Fase2
+        protocolos = Fase2.objects.all()
+        if protocolo:
+            protocolos = protocolos.filter(protocolo__icontains=protocolo)
+        if status_fase:
+            protocolos = protocolos.filter(status_fase2__icontains=status_fase)
+
+    elif fase == 'Fase 3':
+        # Buscar na Fase3
+        protocolos = Fase3.objects.all()
+        if protocolo:
+            protocolos = protocolos.filter(protocolo__icontains=protocolo)
+        if status_fase:
+            protocolos = protocolos.filter(status_fase3__icontains=status_fase)
+
+    elif fase == 'Fase 4':
+        # Buscar na Fase4
+        protocolos = Fase4.objects.all()
+        if protocolo:
+            protocolos = protocolos.filter(protocolo__icontains=protocolo)
+        if status_fase:
+            protocolos = protocolos.filter(status_fase4__icontains=status_fase)
+
+    # Se nenhum filtro de fase for escolhido, você pode buscar em todas as fases
+    else:
+        # Buscar em todas as fases
+        protocolos = list(Fase1.objects.all()) + list(Fase2.objects.all()) + list(Fase3.objects.all()) + list(
+            Fase4.objects.all())
+
+        if protocolo:
+            protocolos = [p for p in protocolos if protocolo in p.protocolo]
+        if status_fase:
+            protocolos = [p for p in protocolos if
+                          status_fase in p.status_fase or status_fase in p.status_fase or status_fase in p.status_fase or status_fase in p.status_fase]
+
+    # Retorna os resultados para o template
+    return render(request, 'atendimentos/busca_form.html', {'protocolos': protocolos})

@@ -1,0 +1,18 @@
+Os casos a serem exibidos tem que ser apenas um por PROTOCOLO, ou seja, se tiver 4 questionários, um em cada fase, preenchido com o mesmo PROTOCOLO, eles devem ser exibidos em um único card unindo todas as fases;
+
+O nome da vítima é algo excluiso da fase 1, ou seja, essa informação deve ser buscada lá.
+
+A fase a ser exibida refere-se ao último questionário respondido. Se o último questionário respondido foi a fase 3, logo a fase é: Fase 3.
+
+Como saber qual a fase? Pela data de finalização do atendimento. Por isso, deve ser comparada as seguintes variáveis:
+
+* finalizacao_atendimento(Fase 1);
+* data_atendimento_fase2(Fase 2);
+* data_hora_fase3(Fase 3);
+* data_atendimento_fase4(Fase 4).
+
+A data mais recente entre as comparações dirá qual a última fase foi realizada.
+
+A partir disso, ou seja, com a fase definida, deve-se fazer uma busca na variável status_fase para informar a condição dela.
+
+Entendeu e consegue fazer isso?
